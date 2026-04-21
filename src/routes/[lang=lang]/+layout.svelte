@@ -29,7 +29,7 @@
 
   {#each data.structuredData as item}
     <script type="application/ld+json">
-      {@html item}
+      {item}
     </script>
   {/each}
 </svelte:head>

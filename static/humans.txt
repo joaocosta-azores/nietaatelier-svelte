@@ -1,0 +1,15 @@
+/* TEAM */
+Company: Nieta Atelier
+Site: https://www.nietaatelier.com
+Contact: nieta@nietaatelier.com
+Location: Angra do Heroismo, Azores, Portugal
+
+Developer: João Costa
+Contact: me@joaocosta.info
+Site: https://joaocosta.pt
+
+/* SITE */
+Last update: 2026-04-21
+Language: Portuguese / English
+Standards: HTML5, CSS3, TypeScript, SvelteKit
+Components: Svelte 5, Vite
