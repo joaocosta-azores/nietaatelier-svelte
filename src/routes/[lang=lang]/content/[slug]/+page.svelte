@@ -2,10 +2,6 @@
   let { data } = $props()
 </script>
 
-<svelte:head>
-  <title>{data.page.title}</title>
-</svelte:head>
-
 <section class="feature-page feature-page--cms">
   <div class={`cms-shell ${data.page.type === 'richtext' ? 'cms-shell--wide' : ''}`}>
     <header class="cms-header">

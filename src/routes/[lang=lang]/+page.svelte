@@ -2,10 +2,6 @@
   let { data } = $props()
 </script>
 
-<svelte:head>
-  <title>Nieta Atelier</title>
-</svelte:head>
-
 <section class="hero">
   <img class="hero-image" src={data.locale.hero} alt="Nieta Atelier hero" />
   <div class="hero-overlay">

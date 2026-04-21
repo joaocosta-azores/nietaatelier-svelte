@@ -2,10 +2,6 @@
   let { data } = $props()
 </script>
 
-<svelte:head>
-  <title>{data.locale.about.title}</title>
-</svelte:head>
-
 <section class="feature-page feature-page--about">
   <div class="section-intro">
     <h1>{data.locale.about.title}</h1>

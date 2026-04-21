@@ -4,6 +4,36 @@
   let mobileMenuOpen = $state(false)
 </script>
 
+<svelte:head>
+  <title>{data.seo.title}</title>
+  <meta name="description" content={data.seo.description} />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href={data.seo.canonicalUrl} />
+  <link rel="alternate" hreflang={data.lang} href={data.seo.canonicalUrl} />
+  <link rel="alternate" hreflang={data.alternateLang} href={data.seo.alternateUrl} />
+  <link rel="alternate" hreflang="x-default" href={data.seo.defaultUrl} />
+
+  <meta property="og:site_name" content={data.seo.siteName} />
+  <meta property="og:title" content={data.seo.title} />
+  <meta property="og:description" content={data.seo.description} />
+  <meta property="og:type" content={data.seo.type} />
+  <meta property="og:url" content={data.seo.canonicalUrl} />
+  <meta property="og:locale" content={data.seo.locale} />
+  <meta property="og:image" content={data.seo.ogImage} />
+  <meta property="og:image:alt" content="Nieta Atelier logo" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={data.seo.title} />
+  <meta name="twitter:description" content={data.seo.description} />
+  <meta name="twitter:image" content={data.seo.ogImage} />
+
+  {#each data.structuredData as item}
+    <script type="application/ld+json">
+      {@html item}
+    </script>
+  {/each}
+</svelte:head>
+
 <div class="site-shell">
   <header class="site-header">
     <div class="utility-bar">

@@ -11,6 +11,10 @@ node_modules
 .svelte-kit/
 dist
 dist-ssr
+.vercel
+.env
+.env.*
+!.env.example
 *.local
 
 # Editor directories and files
