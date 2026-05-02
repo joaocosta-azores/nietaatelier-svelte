@@ -104,15 +104,31 @@ function getSeo(lang: Lang, pathname: string) {
   }
 }
 
+function getStructuredDataPageType(lang: Lang, pathname: string) {
+  const slug = pathname.split('/').filter(Boolean)[1]
+  const staticPageKey = slug ? getStaticPageKey(lang, slug) : undefined
+
+  if (staticPageKey === 'about') return 'AboutPage'
+  if (staticPageKey === 'work') return 'CollectionPage'
+  if (staticPageKey === 'walkingby') return 'CollectionPage'
+  if (staticPageKey === 'termsandconditions') return 'WebPage'
+  if (staticPageKey === 'privacypolicy') return 'WebPage'
+
+  return 'WebPage'
+}
+
 export const load: LayoutLoad = ({ params, url }) => {
   const lang = params.lang as Lang
   const pathname = url.pathname
   const alternateLang = lang === 'en' ? 'pt' : 'en'
   const alternatePath = getAlternatePath(pathname, alternateLang)
+  const defaultPath = getAlternatePath(pathname, 'en')
   const seo = getSeo(lang, pathname)
+  const structuredDataPageType = getStructuredDataPageType(lang, pathname)
   const locale = getLocale(lang)
   const canonicalUrl = `${siteUrl}${pathname}`
   const alternateUrl = `${siteUrl}${alternatePath}`
+  const defaultUrl = `${siteUrl}${defaultPath}`
   const pageName = getPageName(lang, pathname)
   const homeName = lang === 'en' ? 'Home' : 'Inicio'
   const breadcrumbItems =
@@ -156,7 +172,7 @@ export const load: LayoutLoad = ({ params, url }) => {
       locale: seoByLang[lang].locale,
       canonicalUrl,
       alternateUrl,
-      defaultUrl: `${siteUrl}/en/`,
+      defaultUrl,
       ogImage: `${siteUrl}/og-image.png`,
     },
     structuredData: [
@@ -183,7 +199,7 @@ export const load: LayoutLoad = ({ params, url }) => {
       },
       {
         '@context': 'https://schema.org',
-        '@type': 'WebPage',
+        '@type': structuredDataPageType,
         name: seo.title,
         description: seo.description,
         url: canonicalUrl,
