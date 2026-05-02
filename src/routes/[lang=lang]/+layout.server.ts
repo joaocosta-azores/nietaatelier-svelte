@@ -1,9 +1,9 @@
-import { getAlternatePath, getLocale, getStaticPageKey, siteUrl, type Lang } from '$lib/content'
-import type { LayoutLoad } from './$types'
+import { getDirectusLocales } from '$lib/server/directus-content'
+import { getAlternatePath, getStaticPageKey, siteUrl, type Lang, type LocaleContent } from '$lib/content'
+import type { LayoutServerLoad } from './$types'
 
 const seoByLang = {
   en: {
-    siteName: 'Nieta Atelier',
     defaultTitle: 'Nieta Atelier',
     defaultDescription:
       'Sustainable textile design, atelier collections, and circular design work by Nieta Atelier.',
@@ -14,7 +14,6 @@ const seoByLang = {
     locale: 'en_US',
   },
   pt: {
-    siteName: 'Nieta Atelier',
     defaultTitle: 'Nieta Atelier',
     defaultDescription:
       'Design textil sustentavel, colecoes de atelier e trabalho em economia circular da Nieta Atelier.',
@@ -26,9 +25,11 @@ const seoByLang = {
   },
 } as const
 
-function getPageName(lang: Lang, pathname: string) {
-  const locale = getLocale(lang)
+function absoluteUrl(pathOrUrl: string) {
+  return pathOrUrl.startsWith('http') ? pathOrUrl : `${siteUrl}${pathOrUrl}`
+}
 
+function getPageName(lang: Lang, pathname: string, locale: LocaleContent) {
   if (pathname === locale.homePath) return 'Home'
 
   const slug = pathname.split('/').filter(Boolean)[1]
@@ -43,15 +44,14 @@ function getPageName(lang: Lang, pathname: string) {
   return undefined
 }
 
-function getSeo(lang: Lang, pathname: string) {
-  const locale = getLocale(lang)
+function getSeo(lang: Lang, pathname: string, locale: LocaleContent) {
   const seo = seoByLang[lang]
   const slug = pathname.split('/').filter(Boolean)[1]
   const staticPageKey = slug ? getStaticPageKey(lang, slug) : undefined
 
   if (pathname === locale.homePath) {
     return {
-      title: seo.defaultTitle,
+      title: locale.siteName || seo.defaultTitle,
       description: seo.defaultDescription,
       type: 'website',
     }
@@ -59,7 +59,7 @@ function getSeo(lang: Lang, pathname: string) {
 
   if (staticPageKey === 'about') {
     return {
-      title: `${locale.about.title} | ${seo.siteName}`,
+      title: `${locale.about.title} | ${locale.siteName}`,
       description: seo.aboutDescription,
       type: 'article',
     }
@@ -67,7 +67,7 @@ function getSeo(lang: Lang, pathname: string) {
 
   if (staticPageKey === 'work') {
     return {
-      title: `${locale.work.title} | ${seo.siteName}`,
+      title: `${locale.work.title} | ${locale.siteName}`,
       description: seo.workDescription,
       type: 'website',
     }
@@ -75,7 +75,7 @@ function getSeo(lang: Lang, pathname: string) {
 
   if (staticPageKey === 'walkingby') {
     return {
-      title: `${locale.walkingby.title} | ${seo.siteName}`,
+      title: `${locale.walkingby.title} | ${locale.siteName}`,
       description: seo.walkingByDescription,
       type: 'website',
     }
@@ -83,22 +83,22 @@ function getSeo(lang: Lang, pathname: string) {
 
   if (staticPageKey === 'termsandconditions') {
     return {
-      title: `${locale.termsandconditions.title} | ${seo.siteName}`,
-      description: `${locale.termsandconditions.title} - ${seo.siteName}.`,
+      title: `${locale.termsandconditions.title} | ${locale.siteName}`,
+      description: `${locale.termsandconditions.title} - ${locale.siteName}.`,
       type: 'article',
     }
   }
 
   if (staticPageKey === 'privacypolicy') {
     return {
-      title: `${locale.privacypolicy.title} | ${seo.siteName}`,
-      description: `${locale.privacypolicy.title} - ${seo.siteName}.`,
+      title: `${locale.privacypolicy.title} | ${locale.siteName}`,
+      description: `${locale.privacypolicy.title} - ${locale.siteName}.`,
       type: 'article',
     }
   }
 
   return {
-    title: seo.defaultTitle,
+    title: locale.siteName || seo.defaultTitle,
     description: seo.defaultDescription,
     type: 'website',
   }
@@ -117,19 +117,21 @@ function getStructuredDataPageType(lang: Lang, pathname: string) {
   return 'WebPage'
 }
 
-export const load: LayoutLoad = ({ params, url }) => {
+export const load: LayoutServerLoad = async ({ params, url }) => {
+  const allLocales = await getDirectusLocales()
   const lang = params.lang as Lang
   const pathname = url.pathname
   const alternateLang = lang === 'en' ? 'pt' : 'en'
   const alternatePath = getAlternatePath(pathname, alternateLang)
   const defaultPath = getAlternatePath(pathname, 'en')
-  const seo = getSeo(lang, pathname)
+  const locale = allLocales[lang]
+  const seo = getSeo(lang, pathname, locale)
   const structuredDataPageType = getStructuredDataPageType(lang, pathname)
-  const locale = getLocale(lang)
   const canonicalUrl = `${siteUrl}${pathname}`
   const alternateUrl = `${siteUrl}${alternatePath}`
   const defaultUrl = `${siteUrl}${defaultPath}`
-  const pageName = getPageName(lang, pathname)
+  const ogImage = absoluteUrl(locale.ogImage)
+  const pageName = getPageName(lang, pathname, locale)
   const homeName = lang === 'en' ? 'Home' : 'Inicio'
   const breadcrumbItems =
     pathname === locale.homePath
@@ -168,32 +170,29 @@ export const load: LayoutLoad = ({ params, url }) => {
     alternatePath,
     seo: {
       ...seo,
-      siteName: seoByLang[lang].siteName,
+      siteName: locale.siteName,
       locale: seoByLang[lang].locale,
       canonicalUrl,
       alternateUrl,
       defaultUrl,
-      ogImage: `${siteUrl}/og-image.png`,
+      ogImage,
     },
     structuredData: [
       {
         '@context': 'https://schema.org',
         '@type': 'Organization',
-        name: 'Nieta Atelier',
+        name: locale.siteName,
         url: siteUrl,
-        logo: `${siteUrl}/logo.png`,
-        image: `${siteUrl}/og-image.png`,
-        email: 'nieta@nietaatelier.com',
-        telephone: '+351295249400',
-        sameAs: [
-          'https://www.facebook.com/nietaatelier',
-          'https://www.instagram.com/nietaatelier',
-        ],
+        logo: absoluteUrl(locale.logo),
+        image: ogImage,
+        email: locale.contactEmail,
+        telephone: locale.contactPhone,
+        sameAs: locale.social.map((item) => item.href),
       },
       {
         '@context': 'https://schema.org',
         '@type': 'WebSite',
-        name: 'Nieta Atelier',
+        name: locale.siteName,
         url: siteUrl,
         inLanguage: lang,
       },
@@ -206,12 +205,12 @@ export const load: LayoutLoad = ({ params, url }) => {
         inLanguage: lang,
         isPartOf: {
           '@type': 'WebSite',
-          name: 'Nieta Atelier',
+          name: locale.siteName,
           url: siteUrl,
         },
         primaryImageOfPage: {
           '@type': 'ImageObject',
-          url: `${siteUrl}/og-image.png`,
+          url: ogImage,
         },
       },
       {

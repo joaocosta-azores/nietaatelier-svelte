@@ -24,13 +24,15 @@ type LinkItem = {
   external?: boolean
 }
 
-type LocaleContent = {
+export type LocaleContent = {
   code: Lang
+  siteName: string
   languageLabel: string
   switchLabel: string
   homePath: `/${Lang}/`
   logo: string
   hero: string
+  ogImage: string
   aboutImage: string
   nav: LinkItem[]
   infoLinks: LinkItem[]
@@ -39,6 +41,8 @@ type LocaleContent = {
     lines: string[]
   }
   social: LinkItem[]
+  contactEmail: string
+  contactPhone: string
   footerCopy: string
   home: {
     title: string
@@ -89,11 +93,13 @@ const socialLinks: LinkItem[] = [
 export const locales: Record<Lang, LocaleContent> = {
   en: {
     code: 'en',
+    siteName: 'Nieta Atelier',
     languageLabel: 'English',
     switchLabel: 'Portugues PT',
     homePath: '/en/',
     logo,
     hero,
+    ogImage: '/og-image.png',
     aboutImage,
     nav: [
       { label: 'About Us', href: '/en/aboutus' },
@@ -108,6 +114,8 @@ export const locales: Record<Lang, LocaleContent> = {
     ],
     office: { title: 'Office', lines: officeLines },
     social: socialLinks,
+    contactEmail: 'nieta@nietaatelier.com',
+    contactPhone: '+351295249400',
     footerCopy: '© 2026 Nieta Atelier - all rights reserved.',
     home: {
       title: '"O Futuro esta na criatividade sustentavel"',
@@ -199,11 +207,13 @@ export const locales: Record<Lang, LocaleContent> = {
   },
   pt: {
     code: 'pt',
+    siteName: 'Nieta Atelier',
     languageLabel: 'Portugues PT',
     switchLabel: 'English',
     homePath: '/pt/',
     logo,
     hero,
+    ogImage: '/og-image.png',
     aboutImage,
     nav: [
       { label: 'Sobre Nos', href: '/pt/sobrenos' },
@@ -218,6 +228,8 @@ export const locales: Record<Lang, LocaleContent> = {
     ],
     office: { title: 'Office', lines: officeLines },
     social: socialLinks,
+    contactEmail: 'nieta@nietaatelier.com',
+    contactPhone: '+351295249400',
     footerCopy: '© 2026 Nieta Atelier - all rights reserved.',
     home: {
       title: '"O Futuro esta na criatividade sustentavel"',

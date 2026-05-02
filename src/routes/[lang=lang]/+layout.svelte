@@ -2,6 +2,7 @@
   let { data, children } = $props()
 
   let mobileMenuOpen = $state(false)
+  const scriptTag = 'script'
 </script>
 
 <svelte:head>
@@ -28,7 +29,7 @@
   <meta name="twitter:image" content={data.seo.ogImage} />
 
   {#each data.structuredData as item}
-    <svelte:element this="script" type="application/ld+json">{item}</svelte:element>
+    <svelte:element this={scriptTag} type="application/ld+json">{item}</svelte:element>
   {/each}
 </svelte:head>
 
@@ -178,8 +179,8 @@
         {#each data.locale.office.lines as line}
           <p>{line}</p>
         {/each}
-        <a href="tel:+351295249400">+351295249400</a>
-        <a href="mailto:nieta@nietaatelier.com">nieta@nietaatelier.com</a>
+        <a href={`tel:${data.locale.contactPhone}`}>{data.locale.contactPhone}</a>
+        <a href={`mailto:${data.locale.contactEmail}`}>{data.locale.contactEmail}</a>
       </section>
     </div>
     <div class="footer-copy">{data.locale.footerCopy}</div>
