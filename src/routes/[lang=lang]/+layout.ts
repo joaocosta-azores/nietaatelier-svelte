@@ -1,4 +1,4 @@
-import { getLocale, type Lang } from '$lib/content'
+import { getAlternatePath, getLocale, siteUrl, type Lang } from '$lib/content'
 import type { LayoutLoad } from './$types'
 
 const seoByLang = {
@@ -98,10 +98,11 @@ export const load: LayoutLoad = ({ params, url }) => {
   const lang = params.lang as Lang
   const pathname = url.pathname
   const alternateLang = lang === 'en' ? 'pt' : 'en'
+  const alternatePath = getAlternatePath(pathname, alternateLang)
   const seo = getSeo(lang, pathname)
   const locale = getLocale(lang)
-  const canonicalUrl = `${url.origin}${pathname}`
-  const alternateUrl = `${url.origin}${pathname.replace(`/${lang}/`, `/${alternateLang}/`)}`
+  const canonicalUrl = `${siteUrl}${pathname}`
+  const alternateUrl = `${siteUrl}${alternatePath}`
   const pageName = getPageName(lang, pathname)
   const homeName = lang === 'en' ? 'Home' : 'Inicio'
   const breadcrumbItems =
@@ -119,7 +120,7 @@ export const load: LayoutLoad = ({ params, url }) => {
             '@type': 'ListItem',
             position: 1,
             name: homeName,
-            item: `${url.origin}${locale.homePath}`,
+            item: `${siteUrl}${locale.homePath}`,
           },
           ...(pageName
             ? [
@@ -138,23 +139,24 @@ export const load: LayoutLoad = ({ params, url }) => {
     locale,
     pathname,
     alternateLang,
+    alternatePath,
     seo: {
       ...seo,
       siteName: seoByLang[lang].siteName,
       locale: seoByLang[lang].locale,
       canonicalUrl,
       alternateUrl,
-      defaultUrl: `${url.origin}/en/`,
-      ogImage: `${url.origin}/og-image.png`,
+      defaultUrl: `${siteUrl}/en/`,
+      ogImage: `${siteUrl}/og-image.png`,
     },
     structuredData: [
       {
         '@context': 'https://schema.org',
         '@type': 'Organization',
         name: 'Nieta Atelier',
-        url: url.origin,
-        logo: `${url.origin}/logo.png`,
-        image: `${url.origin}/og-image.png`,
+        url: siteUrl,
+        logo: `${siteUrl}/logo.png`,
+        image: `${siteUrl}/og-image.png`,
         email: 'nieta@nietaatelier.com',
         telephone: '+351295249400',
         sameAs: [
@@ -166,7 +168,7 @@ export const load: LayoutLoad = ({ params, url }) => {
         '@context': 'https://schema.org',
         '@type': 'WebSite',
         name: 'Nieta Atelier',
-        url: url.origin,
+        url: siteUrl,
         inLanguage: lang,
       },
       {
@@ -179,11 +181,11 @@ export const load: LayoutLoad = ({ params, url }) => {
         isPartOf: {
           '@type': 'WebSite',
           name: 'Nieta Atelier',
-          url: url.origin,
+          url: siteUrl,
         },
         primaryImageOfPage: {
           '@type': 'ImageObject',
-          url: `${url.origin}/og-image.png`,
+          url: `${siteUrl}/og-image.png`,
         },
       },
       {

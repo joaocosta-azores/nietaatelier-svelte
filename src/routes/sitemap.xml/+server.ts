@@ -1,6 +1,4 @@
-import { locales } from '$lib/content'
-
-const siteUrl = 'https://www.nietaatelier.com'
+import { getAlternatePath, locales, siteUrl, supportedLangs } from '$lib/content'
 
 const staticPages = ['', '/aboutus', '/work', '/walkingby']
 
@@ -14,12 +12,9 @@ function getLocalizedPaths() {
 }
 
 function getAlternateLinks(path: string) {
-  const [, lang, ...segments] = path.split('/')
-  const rest = segments.join('/')
-
-  return Object.keys(locales)
+  return supportedLangs
     .map((localeCode) => {
-      const href = rest ? `${siteUrl}/${localeCode}/${rest}` : `${siteUrl}/${localeCode}/`
+      const href = `${siteUrl}${getAlternatePath(path, localeCode)}`
 
       return `<xhtml:link rel="alternate" hreflang="${localeCode}" href="${href}" />`
     })

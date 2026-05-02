@@ -48,7 +48,7 @@
               {
                 code: data.alternateLang,
                 label: data.locale.switchLabel,
-                href: data.pathname.replace(`/${data.lang}/`, `/${data.alternateLang}/`)
+                href: data.alternatePath
               }
             ] as option}
               <a
@@ -140,7 +140,7 @@
           {
             code: data.alternateLang,
             label: data.locale.switchLabel,
-            href: data.pathname.replace(`/${data.lang}/`, `/${data.alternateLang}/`)
+            href: data.alternatePath
           }
         ] as option}
           <a

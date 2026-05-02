@@ -4,6 +4,8 @@ import aboutImage from './assets/about-nieta.jpeg'
 
 export type Lang = 'en' | 'pt'
 
+export const siteUrl = 'https://www.nietaatelier.com'
+
 type LinkItem = {
   label: string
   href: string
@@ -302,6 +304,54 @@ export const locales: Record<Lang, LocaleContent> = {
       },
     },
   },
+}
+
+export const supportedLangs = Object.keys(locales) as Lang[]
+
+const contentPageKeys = {
+  terms: {
+    en: '3-terms-and-conditions',
+    pt: '3-termos-e-condicoes',
+  },
+  privacy: {
+    en: '7-privacy-policy',
+    pt: '7-politica-de-privacidade',
+  },
+} as const
+
+const contentSlugToKey = Object.values(contentPageKeys).reduce(
+  (acc, page) => {
+    acc[page.en] = page
+    acc[page.pt] = page
+    return acc
+  },
+  {} as Record<string, (typeof contentPageKeys)[keyof typeof contentPageKeys]>,
+)
+
+export function getContentEntries() {
+  return supportedLangs.flatMap((lang) =>
+    Object.keys(locales[lang].cms).map((slug) => ({ lang, slug })),
+  )
+}
+
+export function getAlternatePath(pathname: string, targetLang: Lang) {
+  const segments = pathname.split('/').filter(Boolean)
+
+  if (segments.length === 0) {
+    return `/${targetLang}/`
+  }
+
+  const [, section, slug] = segments
+
+  if (section === 'content' && slug) {
+    const page = contentSlugToKey[slug]
+
+    if (page) {
+      return `/${targetLang}/content/${page[targetLang]}`
+    }
+  }
+
+  return pathname.replace(/^\/(en|pt)(?=\/|$)/, `/${targetLang}`)
 }
 
 export function getLocale(lang: Lang): LocaleContent {
