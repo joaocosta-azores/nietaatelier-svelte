@@ -1,24 +1,37 @@
-import { getAlternatePath, locales, siteUrl, supportedLangs } from '$lib/content'
+import { getAlternatePath, getStaticPagePath, siteUrl, supportedLangs, type StaticPageKey } from '$lib/content'
 
-const staticPages = ['', '/aboutus', '/work', '/walkingby']
+const staticPageKeys: StaticPageKey[] = [
+  'about',
+  'work',
+  'walkingby',
+  'termsandconditions',
+  'privacypolicy',
+]
 
 function getLocalizedPaths() {
-  return Object.entries(locales).flatMap(([lang, locale]) => {
-    const basePaths = staticPages.map((page) => `/${lang}${page === '' ? '/' : page}`)
-    const cmsPaths = Object.keys(locale.cms).map((slug) => `/${lang}/content/${slug}`)
-
-    return [...basePaths, ...cmsPaths]
-  })
+  return [
+    ...supportedLangs.map((lang) => `/${lang}/`),
+    ...supportedLangs.flatMap((lang) =>
+      staticPageKeys.map((pageKey) => `${getStaticPagePath(lang, pageKey)}/`),
+    ),
+  ]
 }
 
 function getAlternateLinks(path: string) {
-  return supportedLangs
-    .map((localeCode) => {
-      const href = `${siteUrl}${getAlternatePath(path, localeCode)}`
+  const localizedLinks = supportedLangs.map((localeCode) => {
+    const alternatePath = getAlternatePath(path, localeCode)
+    const href = `${siteUrl}${alternatePath.endsWith('/') ? alternatePath : `${alternatePath}/`}`
 
-      return `<xhtml:link rel="alternate" hreflang="${localeCode}" href="${href}" />`
-    })
-    .join('')
+    return `<xhtml:link rel="alternate" hreflang="${localeCode}" href="${href}" />`
+  })
+
+  const defaultPath = getAlternatePath(path, 'en')
+  const defaultHref = `${siteUrl}${defaultPath.endsWith('/') ? defaultPath : `${defaultPath}/`}`
+
+  return [
+    ...localizedLinks,
+    `<xhtml:link rel="alternate" hreflang="x-default" href="${defaultHref}" />`,
+  ].join('')
 }
 
 export const prerender = true

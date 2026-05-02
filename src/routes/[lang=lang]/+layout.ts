@@ -1,4 +1,4 @@
-import { getAlternatePath, getLocale, siteUrl, type Lang } from '$lib/content'
+import { getAlternatePath, getLocale, getStaticPageKey, siteUrl, type Lang } from '$lib/content'
 import type { LayoutLoad } from './$types'
 
 const seoByLang = {
@@ -30,19 +30,24 @@ function getPageName(lang: Lang, pathname: string) {
   const locale = getLocale(lang)
 
   if (pathname === locale.homePath) return 'Home'
-  if (pathname === `/${lang}/aboutus`) return locale.about.title
-  if (pathname === `/${lang}/work`) return locale.work.title
-  if (pathname === `/${lang}/walkingby`) return locale.walkingby.title
 
-  const slug = pathname.split('/').pop()
-  const cmsPage = slug ? locale.cms[slug] : undefined
+  const slug = pathname.split('/').filter(Boolean)[1]
+  const staticPageKey = slug ? getStaticPageKey(lang, slug) : undefined
 
-  return cmsPage?.title
+  if (staticPageKey === 'about') return locale.about.title
+  if (staticPageKey === 'work') return locale.work.title
+  if (staticPageKey === 'walkingby') return locale.walkingby.title
+  if (staticPageKey === 'termsandconditions') return locale.termsandconditions.title
+  if (staticPageKey === 'privacypolicy') return locale.privacypolicy.title
+
+  return undefined
 }
 
 function getSeo(lang: Lang, pathname: string) {
   const locale = getLocale(lang)
   const seo = seoByLang[lang]
+  const slug = pathname.split('/').filter(Boolean)[1]
+  const staticPageKey = slug ? getStaticPageKey(lang, slug) : undefined
 
   if (pathname === locale.homePath) {
     return {
@@ -52,7 +57,7 @@ function getSeo(lang: Lang, pathname: string) {
     }
   }
 
-  if (pathname === `/${lang}/aboutus`) {
+  if (staticPageKey === 'about') {
     return {
       title: `${locale.about.title} | ${seo.siteName}`,
       description: seo.aboutDescription,
@@ -60,7 +65,7 @@ function getSeo(lang: Lang, pathname: string) {
     }
   }
 
-  if (pathname === `/${lang}/work`) {
+  if (staticPageKey === 'work') {
     return {
       title: `${locale.work.title} | ${seo.siteName}`,
       description: seo.workDescription,
@@ -68,7 +73,7 @@ function getSeo(lang: Lang, pathname: string) {
     }
   }
 
-  if (pathname === `/${lang}/walkingby`) {
+  if (staticPageKey === 'walkingby') {
     return {
       title: `${locale.walkingby.title} | ${seo.siteName}`,
       description: seo.walkingByDescription,
@@ -76,13 +81,18 @@ function getSeo(lang: Lang, pathname: string) {
     }
   }
 
-  const slug = pathname.split('/').pop()
-  const cmsPage = slug ? locale.cms[slug] : undefined
-
-  if (cmsPage) {
+  if (staticPageKey === 'termsandconditions') {
     return {
-      title: `${cmsPage.title} | ${seo.siteName}`,
-      description: `${cmsPage.title} - ${seo.siteName}.`,
+      title: `${locale.termsandconditions.title} | ${seo.siteName}`,
+      description: `${locale.termsandconditions.title} - ${seo.siteName}.`,
+      type: 'article',
+    }
+  }
+
+  if (staticPageKey === 'privacypolicy') {
+    return {
+      title: `${locale.privacypolicy.title} | ${seo.siteName}`,
+      description: `${locale.privacypolicy.title} - ${seo.siteName}.`,
       type: 'article',
     }
   }

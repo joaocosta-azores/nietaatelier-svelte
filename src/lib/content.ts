@@ -6,26 +6,23 @@ export type Lang = 'en' | 'pt'
 
 export const siteUrl = 'https://www.nietaatelier.com'
 
+export type StaticPageKey =
+  | 'about'
+  | 'work'
+  | 'walkingby'
+  | 'termsandconditions'
+  | 'privacypolicy'
+
+export type StaticPageEntry = {
+  lang: Lang
+  page: string
+}
+
 type LinkItem = {
   label: string
   href: string
   external?: boolean
 }
-
-type CmsCenteredPage = {
-  title: string
-  type: 'centered-lines'
-  lines: string[]
-  trailingHtml: string
-}
-
-type CmsRichTextPage = {
-  title: string
-  type: 'richtext'
-  html: string
-}
-
-export type CmsPage = CmsCenteredPage | CmsRichTextPage
 
 type LocaleContent = {
   code: Lang
@@ -64,8 +61,19 @@ type LocaleContent = {
   walkingby: {
     title: string
     html: string
+  },
+  termsandconditions: {
+    title: string
+    html: string
+  },
+  privacypolicy: {
+    title: string
+    html: string
+  },
+  constactus: {
+    title: string
+    html: string
   }
-  cms: Record<string, CmsPage>
 }
 
 const officeLines = [
@@ -94,8 +102,8 @@ export const locales: Record<Lang, LocaleContent> = {
       { label: 'Azores Ecoblue Project', href: 'https://azores-ecoblue-website.vercel.app/', external: true },
     ],
     infoLinks: [
-      { label: 'Terms and conditions', href: '/en/content/3-terms-and-conditions' },
-      { label: 'Privacy Policy', href: '/en/content/7-privacy-policy' },
+      { label: 'Terms and conditions', href: '/en/terms-and-conditions' },
+      { label: 'Privacy Policy', href: '/en/privacy-policy' },
       { label: 'Contact us', href: 'mailto:nieta@nietaatelier.com', external: true },
     ],
     office: { title: 'Office', lines: officeLines },
@@ -136,57 +144,57 @@ export const locales: Record<Lang, LocaleContent> = {
         <p>This page is under maintenance.</p>
       `,
     },
-    cms: {
-      '3-terms-and-conditions': {
-        title: 'Terms and conditions',
-        type: 'centered-lines',
-        lines: [
-          'For your safety and convenience, please read our terms of order, payment and delivery.',
-          'All prices you find in our online store include VAT, at the prevailing rate',
-          'there may be changes in prices on the website without prior notice.',
-          'After submitting your request, you will receive a confirmation email with payment details.',
-          'Payment is made by bank transfer at the time of the order.',
-          'Your order is confirmed after sending us a copy of the payment by email (in 48hrs).',
-          'IMPORTANT: exceptionally all orders may take 20 (twenty) business days to be delivery after payment.',
-          '30 (thirty) business days for all one-off pieces orders',
-          'All orders are sent by registered mail via CTT Expresso.',
-          'Shipping costs varies according to location and weight of the package ( domestic-between 3.00 to 5.00 euros; international-budget request).',
-          'In case of damage at the reception, please send us an email with the picture of the piece within 2 (two) business days.',
-          'we do not accept returns.',
-        ],
-        trailingHtml: 'If you are a reseller, please <a href="mailto:nieta@nietaatelier.com">contact us</a>.',
-      },
-      '7-privacy-policy': {
-        title: 'Privacy Policy',
-        type: 'richtext',
-        html: `
-          <p>A 25 de Maio de 2018, entrou em vigor na Uniao Europeia o novo "Regulamento Geral de Protecao de Dados" (RGPD), fornecendo diretrizes especificas sobre como os dados pessoais sao recolhidos, tratados e armazenados.</p>
-          <p>Achamos que devera saber de uma forma clara e transparente, que informacoes pessoais sao recolhidas por nos, porque sao recolhidas e como podera solicitar uma copia completa das mesmas ou ordenar a sua destruicao.</p>
-          <p>Queremos fornecer-lhe informacoes claras e completas sobre que dados pessoais recolhemos em simbiotico.eco e como pode gerir esses dados. Por isso apresentamos uma politica de privacidade detalhada, abrangente e transparente.</p>
-          <p>Esta politica de privacidade foi actualizada a 21/Agosto/2018.</p>
-          <p>Se tiver alguma duvida sobre a nossa politica de privacidade ou relativa ao tratamento dos seus dados pessoais, por favor escreva-nos por e-mail para: <a href="mailto:nieta@nietaatelier.com">nieta@nietaatelier.com</a></p>
-          <h2>Quem Somos</h2>
-          <p>O endereco do nosso site e: <a href="https://www.nietaatelier.com/">https://www.nietaatelier.com</a></p>
-          <h2>Uso de Informacao</h2>
-          <p>O <b>Nieta Atelier</b> leva a privacidade dos seus utilizadores e visitantes muito a serio.</p>
-          <h2>Cookies</h2>
-          <p>Ao aceder ao site <a href="http://www.nietaatelier.com/">www.nietaatelier.com</a>, esta a aceitar o uso de cookies para optimizar a sua experiencia de navegacao e analisar a utilizacao nosso site.</p>
-          <h2><b>Como gerir e remover cookies</b></h2>
-          <p>Se estiver a visitar o nosso site atraves de um navegador, podera restringir, bloquear ou remover cookies atraves das configuracoes do seu navegador.</p>
-          <h2><b>Formularios de contacto</b></h2>
-          <p>Quando um utilizador preenche o formulario de contato no nosso site, as unicas informacoes pessoais recolhidas sao nome, endereco de e-mail e endereco IP.</p>
-          <h2><b>Newsletters</b></h2>
-          <p>Quando se inscrever para servicos gratuitos, como distribuicao de noticias por e-mail ou newsletters, o utilizador concorda em receber produtos e anuncios especiais do Nieta Atelier.</p>
-          <h2><b>Seguranca e Proteccao de Dados</b></h2>
-          <p>Utilizamos procedimentos de seguranca rigorosos no armazenamento e utilizacao da informacoes que nos e fornecida pelos utilizadores.</p>
-          <h2><strong>Questoes?</strong></h2>
-          <ul>
-            <li>Se tiver alguma duvida sobre esta politica de privacidade, por favor escreva-nos por e-mail para: nieta@nietaatelier.com</li>
-            <li>Para qualquer questao adicional sobre o RGPD, por favor dirija-se a www.cnpd.pt.</li>
-          </ul>
-          <p>Leia tambem os nossos <a href="/en/content/3-terms-and-conditions">Termos de Utilizacao</a>.</p>
-        `,
-      },
+    termsandconditions: {
+      title: 'Terms and Conditions',
+      html: `
+        <p>For your safety and convenience, please read our terms of order, payment and delivery.</p>
+        <p>All prices you find in our online store include VAT, at the prevailing rate there may be changes in prices on the website without prior notice.</p>
+        <p>After submitting your request, you will receive a confirmation email with payment details.</p>
+        <p>Payment is made by bank transfer at the time of the order.</p>
+        <p>Your order is confirmed after sending us a copy of the payment by email (in 48hrs).</p>
+        <p>IMPORTANT: exceptionally, all orders may take 20 (twenty) business days to be delivery after payment.</p>
+        <p>30 (thirty) business days for all one-off pieces orders</p>
+        <p>All orders are sent by registered mail via CTT Expresso.</p>
+        <p>Shipping costs vary according to location and weight of the package ( domestic between 3.00 to 5.00 euros; international-budget request).</p>
+        <p>In case of damage at the reception, please email us with the picture of the piece within 2 (two) business days.</p>
+        <p>We do not accept returns.</p>
+      `,
+    },
+    privacypolicy: {
+      title: 'Privacy Policy',
+      html: `
+        <p>A 25 de Maio de 2018, entrou em vigor na Uniao Europeia o novo "Regulamento Geral de Protecao de Dados" (RGPD), fornecendo diretrizes especificas sobre como os dados pessoais sao recolhidos, tratados e armazenados.</p>
+        <p>Achamos que devera saber de uma forma clara e transparente, que informacoes pessoais sao recolhidas por nos, porque sao recolhidas e como podera solicitar uma copia completa das mesmas ou ordenar a sua destruicao.</p>
+        <p>Queremos fornecer-lhe informacoes claras e completas sobre que dados pessoais recolhemos em simbiotico.eco e como pode gerir esses dados. Por isso apresentamos uma politica de privacidade detalhada, abrangente e transparente.</p>
+        <p>Esta politica de privacidade foi actualizada a 21/Agosto/2018.</p>
+        <p>Se tiver alguma duvida sobre a nossa politica de privacidade ou relativa ao tratamento dos seus dados pessoais, por favor escreva-nos por e-mail para: <a href="mailto:nieta@nietaatelier.com">nieta@nietaatelier.com</a></p>
+        <h2>Quem Somos</h2>
+        <p>O endereco do nosso site e: <a href="https://www.nietaatelier.com/">https://www.nietaatelier.com</a></p>
+        <h2>Uso de Informacao</h2>
+        <p>O <b>Nieta Atelier</b> leva a privacidade dos seus utilizadores e visitantes muito a serio.</p>
+        <h2>Cookies</h2>
+        <p>Ao aceder ao site <a href="http://www.nietaatelier.com/">www.nietaatelier.com</a>, esta a aceitar o uso de cookies para optimizar a sua experiencia de navegacao e analisar a utilizacao nosso site.</p>
+        <h2><b>Como gerir e remover cookies</b></h2>
+        <p>Se estiver a visitar o nosso site atraves de um navegador, podera restringir, bloquear ou remover cookies atraves das configuracoes do seu navegador.</p>
+        <h2><b>Formularios de contacto</b></h2>
+        <p>Quando um utilizador preenche o formulario de contato no nosso site, as unicas informacoes pessoais recolhidas sao nome, endereco de e-mail e endereco IP.</p>
+        <h2><b>Newsletters</b></h2>
+        <p>Quando se inscrever para servicos gratuitos, como distribuicao de noticias por e-mail ou newsletters, o utilizador concorda em receber produtos e anuncios especiais do Nieta Atelier.</p>
+        <h2><b>Seguranca e Proteccao de Dados</b></h2>
+        <p>Utilizamos procedimentos de seguranca rigorosos no armazenamento e utilizacao da informacoes que nos e fornecida pelos utilizadores.</p>
+        <h2><strong>Questoes?</strong></h2>
+        <ul>
+          <li>Se tiver alguma duvida sobre esta politica de privacidade, por favor escreva-nos por e-mail para: nieta@nietaatelier.com</li>
+          <li>Para qualquer questao adicional sobre o RGPD, por favor dirija-se a www.cnpd.pt.</li>
+        </ul>
+        <p>Leia tambem os nossos <a href="/en/terms-and-conditions">Termos de Utilizacao</a>.</p>
+      `,
+    },
+    constactus: {
+      title: 'Contact Us',
+      html: `
+        <p>This page is under maintenance.</p>
+      `,
     },
   },
   pt: {
@@ -198,14 +206,14 @@ export const locales: Record<Lang, LocaleContent> = {
     hero,
     aboutImage,
     nav: [
-      { label: 'Sobre Nos', href: '/pt/aboutus' },
-      { label: 'Work | Colecoes Capsula', href: '/pt/work' },
+      { label: 'Sobre Nos', href: '/pt/sobrenos' },
+      { label: 'Work | Colecoes Capsula', href: '/pt/trabalho' },
       { label: 'Walking By', href: '/pt/walkingby' },
       { label: 'Azores Ecoblue Project', href: 'https://azores-ecoblue-website.vercel.app/', external: true },
     ],
     infoLinks: [
-      { label: 'Termos e condicoes', href: '/pt/content/3-termos-e-condicoes' },
-      { label: 'Politica de Privacidade', href: '/pt/content/7-politica-de-privacidade' },
+      { label: 'Termos e condicoes', href: '/pt/termos-e-condicoes' },
+      { label: 'Politica de Privacidade', href: '/pt/politica-de-privacidade' },
       { label: 'Contacte-nos', href: 'mailto:nieta@nietaatelier.com', external: true },
     ],
     office: { title: 'Office', lines: officeLines },
@@ -246,12 +254,10 @@ export const locales: Record<Lang, LocaleContent> = {
         <p>This page is under maintenance.</p>
       `,
     },
-    cms: {
-      '3-termos-e-condicoes': {
-        title: 'Termos e condicoes',
-        type: 'richtext',
-        html: `
-          <p>Se nao concorda com qualquer parte do T&amp;C, entao nao podera usar o Nieta Atelier.com de forma alguma.</p>
+    termsandconditions: {
+      title: 'Termos e Condições',
+      html: `
+          <p>Se nao concorda com qualquer parte do T&C, entao nao podera usar o Nieta Atelier.com de forma alguma.</p>
           <h2>CONTAS</h2>
           <p>Todas as pessoas que criem uma conta neste site deverao fornecer informacoes precisas, completas e atualizadas.</p>
           <p>O criador da conta e responsavel por proteger a palavra passe usada para aceder ao Nieta Atelier.com.</p>
@@ -270,52 +276,93 @@ export const locales: Record<Lang, LocaleContent> = {
           <p>Os custos de expedicao poderao variar de acordo com o local e o peso da encomenda.</p>
           <p>No caso da encomenda chegar danificada, por favor envie-nos um email com a fotografia da peca, no espaco de dois dias.</p>
           <p>Nao aceitamos devolucoes.</p>
-          <p>Se for um revendedor, por favor <a href="mailto:nieta@nietaatelier.com">contact us</a>.</p>
-        `,
-      },
-      '7-politica-de-privacidade': {
-        title: 'Politica de Privacidade',
-        type: 'richtext',
-        html: `
-          <p>A 25 de Maio de 2018, entrou em vigor na Uniao Europeia o novo "Regulamento Geral de Protecao de Dados" (RGPD), fornecendo diretrizes especificas sobre como os dados pessoais sao recolhidos, tratados e armazenados.</p>
-          <p>Achamos que devera saber de uma forma clara e transparente, que informacoes pessoais sao recolhidas por nos, porque sao recolhidas e como podera solicitar uma copia completa das mesmas ou ordenar a sua destruicao.</p>
-          <p>Queremos fornecer-lhe informacoes claras e completas sobre que dados pessoais recolhemos em simbiotico.eco e como pode gerir esses dados.</p>
-          <h2>Quem Somos</h2>
-          <p>O endereco do nosso site e: <a href="https://www.nietaatelier.com/">https://www.nietaatelier.com</a></p>
-          <h2>Uso de Informacao</h2>
-          <p>O <b>Nieta Atelier</b> leva a privacidade dos seus utilizadores e visitantes muito a serio.</p>
-          <h2>Cookies</h2>
-          <p>Ao aceder ao site <a href="http://www.nietaatelier.com/">www.nietaatelier.com</a>, esta a aceitar o uso de cookies para optimizar a sua experiencia de navegacao e analisar a utilizacao nosso site.</p>
-          <h2><b>Como gerir e remover cookies</b></h2>
-          <p>Se estiver a visitar o nosso site atraves de um navegador, podera restringir, bloquear ou remover cookies atraves das configuracoes do seu navegador.</p>
-          <h2><b>Formularios de contacto</b></h2>
-          <p>Quando um utilizador preenche o formulario de contato no nosso site, as unicas informacoes pessoais recolhidas sao nome, endereco de e-mail e endereco IP.</p>
-          <h2><b>Newsletters</b></h2>
-          <p>Quando se inscrever para servicos gratuitos, como distribuicao de noticias por e-mail ou newsletters, o utilizador concorda em receber produtos e anuncios especiais do Nieta Atelier.</p>
-          <h2><b>Seguranca e Proteccao de Dados</b></h2>
-          <p>Utilizamos procedimentos de seguranca rigorosos no armazenamento e utilizacao da informacoes que nos e fornecida pelos utilizadores.</p>
-          <h2><strong>Questoes?</strong></h2>
-          <ul>
-            <li>Se tiver alguma duvida sobre esta politica de privacidade, por favor escreva-nos por e-mail para: nieta@nietaatelier.com</li>
-            <li>Para qualquer questao adicional sobre o RGPD, por favor dirija-se a www.cnpd.pt.</li>
-          </ul>
-          <p>Leia tambem os nossos <a href="/pt/content/3-termos-e-condicoes">Termos de Utilizacao</a>.</p>
-        `,
-      },
+          <p>Se for um revendedor, por favor <a href="mailto:nieta@nietaatelier.com">contacte-nos</a>.</p>
+      `,
+    },
+    privacypolicy: {
+      title: 'Políticas de Privacidade',
+      html: `
+        <p>A 25 de Maio de 2018, entrou em vigor na Uniao Europeia o novo "Regulamento Geral de Protecao de Dados" (RGPD), fornecendo diretrizes especificas sobre como os dados pessoais sao recolhidos, tratados e armazenados.</p>
+        <p>Achamos que devera saber de uma forma clara e transparente, que informacoes pessoais sao recolhidas por nos, porque sao recolhidas e como podera solicitar uma copia completa das mesmas ou ordenar a sua destruicao.</p>
+        <p>Queremos fornecer-lhe informacoes claras e completas sobre que dados pessoais recolhemos em simbiotico.eco e como pode gerir esses dados.</p>
+        <h2>Quem Somos</h2>
+        <p>O endereco do nosso site e: <a href="https://www.nietaatelier.com/">https://www.nietaatelier.com</a></p>
+        <h2>Uso de Informacao</h2>
+        <p>O <b>Nieta Atelier</b> leva a privacidade dos seus utilizadores e visitantes muito a serio.</p>
+        <h2>Cookies</h2>
+        <p>Ao aceder ao site <a href="http://www.nietaatelier.com/">www.nietaatelier.com</a>, esta a aceitar o uso de cookies para optimizar a sua experiencia de navegacao e analisar a utilizacao nosso site.</p>
+        <h2><b>Como gerir e remover cookies</b></h2>
+        <p>Se estiver a visitar o nosso site atraves de um navegador, podera restringir, bloquear ou remover cookies atraves das configuracoes do seu navegador.</p>
+        <h2><b>Formularios de contacto</b></h2>
+        <p>Quando um utilizador preenche o formulario de contato no nosso site, as unicas informacoes pessoais recolhidas sao nome, endereco de e-mail e endereco IP.</p>
+        <h2><b>Newsletters</b></h2>
+        <p>Quando se inscrever para servicos gratuitos, como distribuicao de noticias por e-mail ou newsletters, o utilizador concorda em receber produtos e anuncios especiais do Nieta Atelier.</p>
+        <h2><b>Seguranca e Proteccao de Dados</b></h2>
+        <p>Utilizamos procedimentos de seguranca rigorosos no armazenamento e utilizacao da informacoes que nos e fornecida pelos utilizadores.</p>
+        <h2><strong>Questoes?</strong></h2>
+        <ul>
+          <li>Se tiver alguma duvida sobre esta politica de privacidade, por favor escreva-nos por e-mail para: nieta@nietaatelier.com</li>
+          <li>Para qualquer questao adicional sobre o RGPD, por favor dirija-se a www.cnpd.pt.</li>
+        </ul>
+        <p>Leia tambem os nossos <a href="/pt/termos-e-condicoes">Termos de Utilizacao</a>.</p>
+      `,
+    },
+    constactus: {
+      title: 'Contacte-nos',
+      html: `
+        <p>This page is under maintenance.</p>
+      `,
     },
   },
 }
 
 export const supportedLangs = Object.keys(locales) as Lang[]
 
-const contentPageKeys = {
-  terms: {
-    en: '3-terms-and-conditions',
-    pt: '3-termos-e-condicoes',
+const staticPageSlugs: Record<StaticPageKey, Record<Lang, string>> = {
+  about: {
+    en: 'aboutus',
+    pt: 'sobrenos',
   },
-  privacy: {
-    en: '7-privacy-policy',
-    pt: '7-politica-de-privacidade',
+  work: {
+    en: 'work',
+    pt: 'trabalho',
+  },
+  walkingby: {
+    en: 'walkingby',
+    pt: 'walkingby',
+  },
+  termsandconditions: {
+    en: 'terms-and-conditions',
+    pt: 'termos-e-condicoes',
+  },
+  privacypolicy: {
+    en: 'privacy-policy',
+    pt: 'politica-de-privacidade',
+  },
+}
+
+const allStaticPageSlugs = new Set(Object.values(staticPageSlugs).flatMap((slugByLang) => Object.values(slugByLang)))
+
+const staticSlugToKey = Object.entries(staticPageSlugs).reduce(
+  (acc, [pageKey, slugByLang]) => {
+    acc.en[slugByLang.en] = pageKey as StaticPageKey
+    acc.pt[slugByLang.pt] = pageKey as StaticPageKey
+    return acc
+  },
+  {
+    en: {} as Record<string, StaticPageKey>,
+    pt: {} as Record<string, StaticPageKey>,
+  },
+)
+
+const contentPageKeys = {
+  termsandconditions: {
+    en: 'terms-and-conditions',
+    pt: 'termos-e-condicoes',
+  },
+  privacypolicy: {
+    en: 'privacy-policy',
+    pt: 'politica-de-privacidade',
   },
 } as const
 
@@ -328,12 +375,6 @@ const contentSlugToKey = Object.values(contentPageKeys).reduce(
   {} as Record<string, (typeof contentPageKeys)[keyof typeof contentPageKeys]>,
 )
 
-export function getContentEntries() {
-  return supportedLangs.flatMap((lang) =>
-    Object.keys(locales[lang].cms).map((slug) => ({ lang, slug })),
-  )
-}
-
 export function getAlternatePath(pathname: string, targetLang: Lang) {
   const segments = pathname.split('/').filter(Boolean)
 
@@ -341,17 +382,49 @@ export function getAlternatePath(pathname: string, targetLang: Lang) {
     return `/${targetLang}/`
   }
 
-  const [, section, slug] = segments
+  const [lang, sectionOrSlug, slug] = segments
 
-  if (section === 'content' && slug) {
+  if (!lang || (lang !== 'en' && lang !== 'pt')) {
+    return pathname
+  }
+
+  if (segments.length === 2) {
+    const pageKey = staticSlugToKey[lang][sectionOrSlug]
+
+    if (pageKey) {
+      return getStaticPagePath(targetLang, pageKey)
+    }
+  }
+
+  if (sectionOrSlug === 'content' && slug) {
     const page = contentSlugToKey[slug]
 
     if (page) {
-      return `/${targetLang}/content/${page[targetLang]}`
+      return `/${targetLang}/${page[targetLang]}`
     }
   }
 
   return pathname.replace(/^\/(en|pt)(?=\/|$)/, `/${targetLang}`)
+}
+
+export function getStaticPagePath(lang: Lang, pageKey: StaticPageKey) {
+  return `/${lang}/${staticPageSlugs[pageKey][lang]}`
+}
+
+export function getStaticPageKey(lang: Lang, slug: string) {
+  return staticSlugToKey[lang][slug]
+}
+
+export function getStaticPageEntries(): StaticPageEntry[] {
+  const slugMaps = Object.values(staticPageSlugs) as Array<Record<Lang, string>>
+
+  return supportedLangs.flatMap((lang) =>
+    slugMaps.map((slugByLang) => ({ lang, page: slugByLang[lang] })),
+  )
+}
+
+export function isStaticPageSlug(slug: string) {
+  return allStaticPageSlugs.has(slug)
 }
 
 export function getLocale(lang: Lang): LocaleContent {

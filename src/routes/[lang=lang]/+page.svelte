@@ -19,7 +19,7 @@
   <div class="about-inner">
     <h2>{data.locale.home.previewTitle}</h2>
     <p>{data.locale.home.previewText}</p>
-    <a class="secondary-cta" href={`/${data.locale.code}/aboutus`}>
+    <a class="secondary-cta" href={data.locale.nav[0].href}>
       {data.locale.home.previewCta}
     </a>
   </div>
