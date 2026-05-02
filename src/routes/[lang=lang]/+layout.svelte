@@ -28,9 +28,7 @@
   <meta name="twitter:image" content={data.seo.ogImage} />
 
   {#each data.structuredData as item}
-    <script type="application/ld+json">
-      {item}
-    </script>
+    <svelte:element this="script" type="application/ld+json">{item}</svelte:element>
   {/each}
 </svelte:head>
 
