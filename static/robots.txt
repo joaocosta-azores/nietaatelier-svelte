@@ -1,5 +1,24 @@
 User-agent: *
 Allow: /
 
+User-agent: seranking-backlinks
+Disallow: /
+
+User-agent: semrush
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: PetalBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: bingbot
+Crawl-delay: 10
+Allow: /
+
 Sitemap: https://www.nietaatelier.com/sitemap.xml
 Host: www.nietaatelier.com
