@@ -1,7 +1,13 @@
+import {
+  DIRECTUS_PUBLIC_ASSETS_URL,
+  DIRECTUS_TOKEN,
+  DIRECTUS_URL,
+} from '$env/static/private'
 import { locales, supportedLangs, type Lang, type LocaleContent } from '$lib/content'
 
 type DirectusFile = {
   id: string
+  filename_disk?: string
 }
 
 type SiteSettingsResponse = {
@@ -39,6 +45,11 @@ function getAssetUrl(baseUrl: string, file?: string | DirectusFile | null) {
   if (!file) return undefined
 
   const id = typeof file === 'string' ? file : file.id
+  const publicAssetBaseUrl = DIRECTUS_PUBLIC_ASSETS_URL?.replace(/\/$/, '')
+
+  if (publicAssetBaseUrl && typeof file !== 'string' && file.filename_disk) {
+    return `${publicAssetBaseUrl}/${file.filename_disk}`
+  }
 
   return `${baseUrl}/assets/${id}`
 }
@@ -51,14 +62,14 @@ function splitOfficeLines(address?: string) {
 }
 
 async function directusFetch<T>(path: string): Promise<T> {
-  if (!process.env.DIRECTUS_URL || !process.env.DIRECTUS_TOKEN) {
+  if (!DIRECTUS_URL || !DIRECTUS_TOKEN) {
     throw new Error('Directus env vars are not configured')
   }
 
-  const baseUrl = process.env.DIRECTUS_URL.replace(/\/$/, '')
+  const baseUrl = DIRECTUS_URL.replace(/\/$/, '')
   const response = await fetch(`${baseUrl}${path}`, {
     headers: {
-      Authorization: `Bearer ${process.env.DIRECTUS_TOKEN}`,
+      Authorization: `Bearer ${DIRECTUS_TOKEN}`,
     },
   })
 
@@ -78,19 +89,19 @@ let localesPromise: Promise<Record<Lang, LocaleContent>> | undefined
 async function loadDirectusLocales() {
   const resolvedLocales = cloneFallbackLocales()
 
-  if (!process.env.DIRECTUS_URL || !process.env.DIRECTUS_TOKEN) {
+  if (!DIRECTUS_URL || !DIRECTUS_TOKEN) {
     return resolvedLocales
   }
 
-  const baseUrl = process.env.DIRECTUS_URL.replace(/\/$/, '')
+  const baseUrl = DIRECTUS_URL.replace(/\/$/, '')
 
   try {
     const [siteSettings, homePage] = await Promise.all([
       directusFetch<SiteSettingsResponse>(
-        '/items/nietaatelier_site_settings?fields=site_name,contact_email,contact_phone,facebook_url,instagram_url,office_address,default_og_image,logo',
+        '/items/nietaatelier_site_settings?fields=site_name,contact_email,contact_phone,facebook_url,instagram_url,office_address,default_og_image.id,default_og_image.filename_disk,logo.id,logo.filename_disk',
       ),
       directusFetch<HomePageResponse>(
-        '/items/nietaatelier_home_page?fields=hero_image,translations.languages_code,translations.hero_title,translations.hero_kicker,translations.hero_label,translations.hero_url,translations.aboutus_title,translations.aboutus_text,translations.aboutus_label',
+        '/items/nietaatelier_home_page?fields=hero_image.id,hero_image.filename_disk,translations.languages_code,translations.hero_title,translations.hero_kicker,translations.hero_label,translations.hero_url,translations.aboutus_title,translations.aboutus_text,translations.aboutus_label',
       ),
     ])
 

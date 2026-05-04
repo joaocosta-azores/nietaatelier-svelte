@@ -13,5 +13,12 @@
     "skipLibCheck": true,
     "strict": true
   },
-  "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.svelte"]
+  "include": [
+    ".svelte-kit/ambient.d.ts",
+    ".svelte-kit/non-ambient.d.ts",
+    ".svelte-kit/types/**/*.d.ts",
+    "src/**/*.d.ts",
+    "src/**/*.ts",
+    "src/**/*.svelte"
+  ]
 }
